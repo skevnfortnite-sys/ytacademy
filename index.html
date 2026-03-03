@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YTAcademy</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --gold:#CFB53B;--gold2:#B8960C;--gold3:#FFD700;--gold-light:rgba(207,181,59,.15);
+  --dark:#080808;--dark2:#0f0f0f;--dark3:#161616;--dark4:#1c1c1c;
+  --text:#f0f0f0;--gray:#888;--border:#242424;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden}
+
+/* ========= UTILS ========= */
+.hidden{display:none!important}
+.gold{color:var(--gold)}
+.page{min-height:100vh}
+
+/* ========= NAV ========= */
+nav{position:fixed;top:0;width:100%;z-index:999;background:rgba(8,8,8,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:66px;padding:0 5%}
+.logo{font-size:1.45rem;font-weight:900;color:var(--gold);letter-spacing:-.5px;text-shadow:0 0 20px rgba(207,181,59,.4)}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{color:#aaa;text-decoration:none;font-size:.88rem;transition:.2s}
+.nav-links a:hover{color:var(--gold)}
+.nav-right{display:flex;gap:.8rem;align-items:center}
+.btn-nav{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:800;padding:.5rem 1.4rem;border-radius:7px;text-decoration:none;font-size:.88rem;cursor:pointer;border:none;transition:.2s}
+.btn-nav:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(207,181,59,.35)}
+.btn-nav-outline{border:1px solid var(--gold);color:var(--gold);background:transparent;font-weight:700;padding:.45rem 1.2rem;border-radius:7px;text-decoration:none;font-size:.88rem;cursor:pointer;transition:.2s}
+.btn-nav-outline:hover{background:var(--gold-light)}
+
+/* ========= HERO ========= */
+#page-home{padding-top:66px}
+.hero{min-height:calc(100vh - 66px);display:flex;align-items:center;padding:0 5%;position:relative;overflow:hidden;background:#080808}
+.hero-bg-gradient{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 65% 50%,rgba(207,181,59,.08) 0%,transparent 70%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(207,181,59,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(207,181,59,.03) 1px,transparent 1px);background-size:60px 60px}
+.hero-content{position:relative;z-index:1;max-width:620px}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(207,181,59,.08);border:1px solid rgba(207,181,59,.3);color:var(--gold);font-size:.78rem;padding:.35rem 1rem;border-radius:20px;margin-bottom:1.4rem;font-weight:700;letter-spacing:.5px}
+.hero-content h1{font-size:clamp(2.4rem,5vw,4rem);font-weight:900;line-height:1.08;margin-bottom:1.1rem}
+.hero-content h1 em{color:var(--gold);font-style:normal;text-shadow:0 0 30px rgba(207,181,59,.3)}
+.hero-sub{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
+.pill{background:rgba(255,255,255,.04);border:1px solid var(--border);padding:.35rem .9rem;border-radius:20px;font-size:.82rem;color:#bbb;display:flex;align-items:center;gap:.4rem}
+.pill::before{content:"✦";color:var(--gold);font-size:.65rem}
+.stats{display:flex;gap:1rem;margin-bottom:2.2rem;flex-wrap:wrap}
+.stat{background:rgba(207,181,59,.06);border:1px solid rgba(207,181,59,.2);border-radius:12px;padding:.9rem 1.4rem;text-align:center;transition:.3s}
+.stat:hover{border-color:var(--gold);background:rgba(207,181,59,.1)}
+.stat-num{font-size:1.6rem;font-weight:900;color:var(--gold)}
+.stat-label{font-size:.72rem;color:var(--gray);margin-top:.2rem;text-transform:uppercase;letter-spacing:.5px}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-weight:800;padding:.9rem 2rem;border-radius:9px;text-decoration:none;font-size:.95rem;transition:.3s;display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;border:none}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(207,181,59,.4)}
+.btn-ghost{border:1px solid #333;color:#bbb;padding:.9rem 1.6rem;border-radius:9px;text-decoration:none;font-size:.9rem;transition:.2s;cursor:pointer;background:transparent}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ========= SECTIONS ========= */
+section.sec{padding:90px 5%}
+.sec-tag{color:var(--gold);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;margin-bottom:.8rem}
+.sec-title{font-size:clamp(1.9rem,3.5vw,2.9rem);font-weight:900;margin-bottom:.9rem;line-height:1.15}
+.sec-title em{color:var(--gold);font-style:normal}
+.sec-sub{color:var(--gray);font-size:.95rem;max-width:520px;line-height:1.8}
+.sec-dark{background:var(--dark2)}
+
+/* MODULES */
+.modules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.2rem;margin-top:3rem}
+.mod-card{background:var(--dark3);border:1px solid var(--border);border-radius:13px;padding:1.6rem;transition:.3s;position:relative;overflow:hidden}
+.mod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0;transition:.3s}
+.mod-card:hover{border-color:rgba(207,181,59,.4);transform:translateY(-5px)}
+.mod-card:hover::before{opacity:1}
+.mod-num{font-size:.7rem;color:var(--gold);font-weight:700;letter-spacing:2px;margin-bottom:.8rem}
+.mod-icon{font-size:2rem;margin-bottom:.9rem}
+.mod-card h3{font-size:1rem;font-weight:700;margin-bottom:.5rem}
+.mod-card p{font-size:.83rem;color:var(--gray);line-height:1.7}
+
+/* TESTI */
+.testi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.2rem;margin-top:3rem}
+.testi-card{background:var(--dark3);border:1px solid var(--border);border-radius:13px;padding:1.6rem;transition:.3s}
+.testi-card:hover{border-color:rgba(207,181,59,.3)}
+.stars{color:var(--gold);margin-bottom:.8rem;letter-spacing:2px}
+.testi-card p{font-size:.88rem;color:#ccc;line-height:1.75;margin-bottom:1.1rem;font-style:italic}
+.testi-author{display:flex;align-items:center;gap:.8rem}
+.avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-weight:900;font-size:.9rem;color:#000;flex-shrink:0}
+.author-info strong{display:block;font-size:.88rem}
+.author-info span{font-size:.76rem;color:var(--gold)}
+
+/* PRICING */
+.pricing-wrap{display:flex;gap:1.5rem;margin-top:3rem;flex-wrap:wrap}
+.price-card{background:var(--dark3);border:1px solid var(--border);border-radius:15px;padding:2rem;flex:1;min-width:240px;position:relative;transition:.3s}
+.price-card:hover{transform:translateY(-4px)}
+.price-card.pop{border-color:var(--gold);background:linear-gradient(180deg,rgba(207,181,59,.07),var(--dark3))}
+.pop-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-size:.72rem;font-weight:900;padding:.28rem 1rem;border-radius:20px;white-space:nowrap;letter-spacing:.5px}
+.plan-name{font-size:.78rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:2px;margin-bottom:.6rem}
+.plan-price{font-size:2.8rem;font-weight:900;margin-bottom:.3rem;line-height:1}
+.plan-price sup{font-size:1rem;vertical-align:super;font-weight:700}
+.plan-period{font-size:.8rem;color:var(--gray);margin-bottom:1rem}
+.plan-desc{font-size:.83rem;color:#aaa;margin-bottom:1.5rem;line-height:1.6;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.plan-features{list-style:none;margin-bottom:1.8rem}
+.plan-features li{font-size:.85rem;color:#ccc;padding:.45rem 0;display:flex;gap:.6rem;align-items:flex-start}
+.plan-features li::before{content:"✓";color:var(--gold);font-weight:900;flex-shrink:0;margin-top:.05rem}
+.btn-price{display:block;text-align:center;padding:.9rem;border-radius:9px;font-weight:800;text-decoration:none;font-size:.9rem;transition:.2s;cursor:pointer;border:none;width:100%}
+.btn-price-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000}
+.btn-price-gold:hover{box-shadow:0 6px 20px rgba(207,181,59,.35);transform:translateY(-2px)}
+.btn-price-outline{border:1px solid #444;color:#ccc;background:transparent}
+.btn-price-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+/* FAQ */
+.faq-list{margin-top:3rem;max-width:760px;display:flex;flex-direction:column;gap:.9rem}
+.faq-item{background:var(--dark3);border:1px solid var(--border);border-radius:11px;overflow:hidden}
+.faq-q{padding:1.15rem 1.4rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:.92rem;user-select:none;transition:.2s}
+.faq-q:hover{color:var(--gold)}
+.faq-icon{color:var(--gold);font-size:1.3rem;transition:.3s;flex-shrink:0}
+.faq-a{padding:0 1.4rem;max-height:0;overflow:hidden;transition:.35s;font-size:.86rem;color:var(--gray);line-height:1.8}
+.faq-item.open .faq-a{max-height:220px;padding:0 1.4rem 1.2rem}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;margin-top:3rem}
+.contact-info p{color:var(--gray);line-height:1.85;margin-bottom:1.5rem;font-size:.92rem}
+.c-link{display:flex;align-items:center;gap:.8rem;color:#bbb;text-decoration:none;margin-bottom:.9rem;font-size:.88rem;transition:.2s}
+.c-link:hover{color:var(--gold)}
+.form-input{background:var(--dark3);border:1px solid var(--border);color:#fff;padding:.85rem 1.1rem;border-radius:9px;font-size:.88rem;outline:none;transition:.2s;font-family:inherit;width:100%}
+.form-input:focus{border-color:var(--gold)}
+textarea.form-input{resize:vertical;min-height:120px}
+.contact-form{display:flex;flex-direction:column;gap:1rem}
+
+/* FOOTER */
+footer{background:#050505;border-top:1px solid #1a1a1a;padding:2rem 5%;text-align:center;color:var(--gray);font-size:.82rem}
+
+/* ========= MODAL AUTH / SUBSCRIBE ========= */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal-box{background:var(--dark2);border:1px solid var(--border);border-radius:16px;padding:2.5rem;width:100%;max-width:460px;position:relative}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#666;font-size:1.4rem;cursor:pointer;transition:.2s}
+.modal-close:hover{color:var(--gold)}
+.modal-logo{text-align:center;margin-bottom:1.5rem}
+.modal-logo span{font-size:1.3rem;font-weight:900;color:var(--gold)}
+.modal-title{font-size:1.4rem;font-weight:800;margin-bottom:.5rem;text-align:center}
+.modal-sub{color:var(--gray);font-size:.85rem;text-align:center;margin-bottom:2rem}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:.8rem;background:#fff;color:#111;font-weight:700;padding:.9rem;border-radius:9px;cursor:pointer;border:none;width:100%;font-size:.95rem;transition:.2s}
+.btn-google:hover{background:#f0f0f0;transform:translateY(-2px)}
+.btn-google img{width:20px;height:20px}
+.modal-divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0}
+.modal-divider span{color:#444;font-size:.8rem}
+.modal-divider::before,.modal-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* PLAN SELECT MODAL */
+.plan-select-grid{display:flex;flex-direction:column;gap:.8rem}
+.plan-select-item{border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.3rem;cursor:pointer;transition:.2s;display:flex;justify-content:space-between;align-items:center}
+.plan-select-item:hover,.plan-select-item.selected{border-color:var(--gold);background:rgba(207,181,59,.07)}
+.plan-select-item.pop-plan{border-color:rgba(207,181,59,.5);background:rgba(207,181,59,.05)}
+.plan-info strong{display:block;font-size:.95rem;font-weight:700}
+.plan-info span{font-size:.78rem;color:var(--gray)}
+.plan-price-tag{font-size:1.2rem;font-weight:900;color:var(--gold)}
+.plan-price-tag small{font-size:.7rem;color:var(--gray);font-weight:400}
+.badge-pop{background:var(--gold);color:#000;font-size:.65rem;font-weight:800;padding:.15rem .5rem;border-radius:20px;margin-left:.5rem}
+
+/* ========= DASHBOARD ÉLÈVE ========= */
+#page-dashboard{background:var(--dark);min-height:100vh;padding-top:66px}
+.dash-header{background:var(--dark2);border-bottom:1px solid var(--border);padding:2rem 5%;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap}
+.dash-welcome h2{font-size:1.4rem;font-weight:800}
+.dash-welcome p{color:var(--gray);font-size:.85rem;margin-top:.2rem}
+.dash-plan-badge{background:var(--gold-light);border:1px solid rgba(207,181,59,.3);color:var(--gold);font-size:.8rem;font-weight:700;padding:.4rem .9rem;border-radius:20px}
+.dash-body{padding:2.5rem 5%}
+.dash-stats{display:flex;gap:1rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.ds{background:var(--dark3);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.6rem;flex:1;min-width:160px}
+.ds-num{font-size:1.8rem;font-weight:900;color:var(--gold)}
+.ds-label{font-size:.75rem;color:var(--gray);margin-top:.2rem;text-transform:uppercase;letter-spacing:.5px}
+.modules-list{display:flex;flex-direction:column;gap:1rem}
+.mod-item{background:var(--dark3);border:1px solid var(--border);border-radius:12px;padding:1.4rem 1.6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;transition:.3s}
+.mod-item:hover{border-color:rgba(207,181,59,.3)}
+.mod-item-left{display:flex;align-items:center;gap:1rem}
+.mod-num-badge{background:rgba(207,181,59,.1);border:1px solid rgba(207,181,59,.3);color:var(--gold);font-size:.75rem;font-weight:800;padding:.3rem .7rem;border-radius:6px;white-space:nowrap}
+.mod-item-info strong{font-size:.95rem;display:block}
+.mod-item-info span{font-size:.8rem;color:var(--gray)}
+.mod-status{font-size:.78rem;font-weight:700;padding:.3rem .8rem;border-radius:20px}
+.mod-locked{background:#1a1a1a;color:#555;border:1px solid #2a2a2a}
+.mod-open{background:rgba(207,181,59,.1);color:var(--gold);border:1px solid rgba(207,181,59,.3);cursor:pointer}
+.mod-done{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.3)}
+.progress-bar-wrap{background:#1a1a1a;border-radius:20px;height:8px;margin:2rem 0 1rem;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold3));border-radius:20px;transition:.5s}
+
+/* VIDEO PLAYER */
+.video-player-wrap{background:var(--dark2);border:1px solid var(--border);border-radius:13px;padding:2rem;margin-top:1.5rem}
+.video-player-wrap h3{font-size:1.1rem;font-weight:700;margin-bottom:1rem;color:var(--gold)}
+.video-embed{width:100%;aspect-ratio:16/9;background:#111;border-radius:9px;border:1px solid var(--border);overflow:hidden}
+.video-embed iframe{width:100%;height:100%;border:none}
+
+/* ========= ADMIN PANEL ========= */
+#page-admin{background:var(--dark);min-height:100vh;padding-top:66px}
+.admin-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 66px)}
+.admin-sidebar{background:var(--dark2);border-right:1px solid var(--border);padding:1.5rem}
+.admin-sidebar h3{font-size:.7rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:2px;margin-bottom:1rem;margin-top:1.5rem}
+.admin-sidebar h3:first-child{margin-top:0}
+.admin-nav-item{display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;border-radius:8px;cursor:pointer;font-size:.88rem;color:#bbb;transition:.2s;margin-bottom:.2rem}
+.admin-nav-item:hover,.admin-nav-item.active{background:var(--gold-light);color:var(--gold)}
+.admin-nav-item span:first-child{font-size:1rem}
+.admin-content{padding:2.5rem;overflow-y:auto}
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem}
+.admin-topbar h2{font-size:1.5rem;font-weight:800}
+.admin-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-bottom:2.5rem}
+.ac{background:var(--dark3);border:1px solid var(--border);border-radius:12px;padding:1.4rem}
+.ac-num{font-size:2rem;font-weight:900;color:var(--gold)}
+.ac-label{font-size:.78rem;color:var(--gray);margin-top:.3rem;text-transform:uppercase;letter-spacing:.5px}
+.ac-trend{font-size:.75rem;color:#22c55e;margin-top:.3rem}
+
+/* ADMIN TABLE */
+.admin-table-wrap{background:var(--dark3);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:2rem}
+.admin-table-head{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.admin-table-head h3{font-size:.95rem;font-weight:700}
+table{width:100%;border-collapse:collapse}
+th{padding:.8rem 1.2rem;text-align:left;font-size:.75rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+td{padding:.9rem 1.2rem;font-size:.84rem;border-bottom:1px solid #111;color:#ccc}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(207,181,59,.03)}
+.badge{padding:.2rem .7rem;border-radius:20px;font-size:.72rem;font-weight:700}
+.badge-gold{background:rgba(207,181,59,.15);color:var(--gold)}
+.badge-green{background:rgba(34,197,94,.15);color:#22c55e}
+.badge-blue{background:rgba(59,130,246,.15);color:#60a5fa}
+.badge-red{background:rgba(239,68,68,.15);color:#f87171}
+
+/* MODULE EDITOR */
+.module-editor{background:var(--dark3);border:1px solid var(--border);border-radius:13px;padding:1.8rem}
+.module-editor h3{font-size:1rem;font-weight:700;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+.form-label{font-size:.78rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px}
+.form-control{background:var(--dark4);border:1px solid var(--border);color:#fff;padding:.8rem 1rem;border-radius:8px;font-size:.88rem;outline:none;transition:.2s;font-family:inherit;width:100%}
+.form-control:focus{border-color:var(--gold)}
+textarea.form-control{min-height:100px;resize:vertical}
+select.form-control option{background:var(--dark4)}
+.btn-sm{padding:.5rem 1rem;border-radius:7px;font-size:.82rem;font-weight:700;cursor:pointer;border:none;transition:.2s}
+.btn-sm-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000}
+.btn-sm-red{background:rgba(239,68,68,.15);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.btn-sm-red:hover{background:rgba(239,68,68,.25)}
+.module-list-admin{display:flex;flex-direction:column;gap:.8rem;margin-top:1.5rem}
+.mod-admin-item{background:var(--dark4);border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.mod-admin-info strong{font-size:.9rem;display:block}
+.mod-admin-info span{font-size:.78rem;color:var(--gray)}
+.mod-admin-actions{display:flex;gap:.5rem;flex-shrink:0}
+
+/* VISITS TABLE */
+.visits-list{display:flex;flex-direction:column;gap:.5rem}
+.visit-item{background:var(--dark4);border:1px solid var(--border);border-radius:9px;padding:.9rem 1.2rem;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:1rem;align-items:center;font-size:.82rem}
+.visit-item .v-page{color:var(--gold);font-weight:600}
+.visit-item .v-ip{color:#888;font-family:monospace}
+.visit-time{color:#555;font-size:.75rem}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--dark3);border:1px solid rgba(207,181,59,.4);color:var(--text);padding:.9rem 1.4rem;border-radius:10px;font-size:.88rem;z-index:9999;transform:translateY(100px);opacity:0;transition:.3s;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.toast.show{transform:translateY(0);opacity:1}
+
+@media(max-width:800px){
+  .admin-layout{grid-template-columns:1fr}
+  .admin-sidebar{display:none}
+  .contact-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">YTAcademy</div>
+    <ul class="nav-links" id="mainNavLinks">
+      <li><a href="#" onclick="showPage('home')">Accueil</a></li>
+      <li><a href="#programme">Programme</a></li>
+      <li><a href="#tarifs">Tarifs</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right" id="navRight">
+      <button class="btn-nav-outline" onclick="openModal('auth')">Connexion</button>
+      <button class="btn-nav" onclick="openModal('auth')">Rejoindre</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== PAGE HOME ===================== -->
+<div id="page-home" class="page">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-gradient"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🚀 Formation N°1 YouTube Automation France</div>
+    <h1>Transforme YouTube en<br><em>Business Rentable</em></h1>
+    <div class="hero-sub">
+      <span class="pill">Module complet</span>
+      <span class="pill">Sans visage</span>
+      <span class="pill">Résultat garanti</span>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">3 Mrd</div><div class="stat-label">Vues Générées</div></div>
+      <div class="stat"><div class="stat-num">20M</div><div class="stat-label">Abonnés Cumulés</div></div>
+      <div class="stat"><div class="stat-num">20 000€</div><div class="stat-label">Revenus Mensuels</div></div>
+    </div>
+    <div class="hero-btns">
+      <button class="btn-gold" onclick="openModal('auth')">🎓 Rejoindre YTAcademy</button>
+      <a href="#programme" class="btn-ghost">Voir le programme</a>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRAMME -->
+<section class="sec sec-dark" id="programme">
+  <div class="sec-tag">Ce que tu vas apprendre</div>
+  <div class="sec-title">Un programme <em>complet & actionnable</em></div>
+  <div class="sec-sub">Chaque module est conçu pour te faire passer à l'action immédiatement, même en partant de zéro.</div>
+  <div class="modules-grid" id="publicModules">
+    <div class="mod-card"><div class="mod-num">MODULE 01</div><div class="mod-icon">🎯</div><h3>Choisir sa Niche</h3><p>Identifie les niches les plus rentables et positionne-toi pour dominer ton marché dès le départ.</p></div>
+    <div class="mod-card"><div class="mod-num">MODULE 02</div><div class="mod-icon">🎬</div><h3>Créer sans apparaître</h3><p>Scripts, voix off, montage. Publie des vidéos de qualité sans jamais montrer ton visage.</p></div>
+    <div class="mod-card"><div class="mod-num">MODULE 03</div><div class="mod-icon">📈</div><h3>Croissance Organique</h3><p>Comprends l'algorithme YouTube et optimise titres, miniatures et descriptions pour exploser.</p></div>
+    <div class="mod-card"><div class="mod-num">MODULE 04</div><div class="mod-icon">💰</div><h3>Monétisation Avancée</h3><p>AdSense, sponsoring, affiliation — multiplie tes sources de revenus depuis une seule chaîne.</p></div>
+    <div class="mod-card"><div class="mod-num">MODULE 05</div><div class="mod-icon">⚙️</div><h3>Automatiser & Déléguer</h3><p>Construis ton équipe, externalise la production et fais tourner ta chaîne en automatique.</p></div>
+    <div class="mod-card"><div class="mod-num">MODULE 06</div><div class="mod-icon">🏆</div><h3>Scaler ton Business</h3><p>Lance plusieurs chaînes, optimise tes process et atteins des revenus à 5 chiffres par mois.</p></div>
+  </div>
+</section>
+
+<!-- TEMOIGNAGES -->
+<section class="sec" id="temoignages">
+  <div class="sec-tag">Ils l'ont fait</div>
+  <div class="sec-title">Résultats de nos <em>élèves</em></div>
+  <div class="testi-grid">
+    <div class="testi-card"><div class="stars">★★★★★</div><p>"En 3 mois j'ai atteint 10 000 abonnés et généré mes 1 000 premiers euros grâce à AdSense."</p><div class="testi-author"><div class="avatar">T</div><div class="author-info"><strong>Thomas R.</strong><span>3 100€ / mois</span></div></div></div>
+    <div class="testi-card"><div class="stars">★★★★★</div><p>"Je partais de zéro. Aujourd'hui ma chaîne tourne en automatique et me rapporte chaque mois sans effort."</p><div class="testi-author"><div class="avatar">S</div><div class="author-info"><strong>Sarah M.</strong><span>1 800€ / mois</span></div></div></div>
+    <div class="testi-card"><div class="stars">★★★★★</div><p>"Le module monétisation avancée m'a changé la vie. Premier sponsor à 2 500€ dès 5 000 abonnés."</p><div class="testi-author"><div class="avatar">K</div><div class="author-info"><strong>Karim B.</strong><span>4 500€ / mois</span></div></div></div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section class="sec sec-dark" id="tarifs">
+  <div class="sec-tag">Investis dans toi</div>
+  <div class="sec-title">Choisis ton <em>abonnement</em></div>
+  <div class="sec-sub">Accès mensuel, sans engagement. Annule à tout moment.</div>
+  <div class="pricing-wrap">
+    <div class="price-card">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sup>€</sup>49</div>
+      <div class="plan-period">/ mois</div>
+      <div class="plan-desc">Pour débuter et tester le modèle YouTube Automation</div>
+      <ul class="plan-features">
+        <li>Accès aux 3 premiers modules</li>
+        <li>Communauté Discord</li>
+        <li>Mises à jour incluses</li>
+        <li>Support par email</li>
+      </ul>
+      <button class="btn-price btn-price-outline" onclick="window.open('https://www.ytacademy.fr/6350270f','_blank')">Commencer</button>
+    </div>
+    <div class="price-card pop">
+      <div class="pop-badge">⭐ Le plus populaire</div>
+      <div class="plan-name">Academy</div>
+      <div class="plan-price"><sup>€</sup>79</div>
+      <div class="plan-period">/ mois</div>
+      <div class="plan-desc">La formation complète pour construire ton business YouTube</div>
+      <ul class="plan-features">
+        <li>Accès aux 6 modules complets</li>
+        <li>Communauté Discord VIP</li>
+        <li>Appels de groupe mensuels</li>
+        <li>Templates & scripts offerts</li>
+        <li>Nouvelles vidéos chaque mois</li>
+        <li>Garantie résultat 30 jours</li>
+      </ul>
+      <button class="btn-price btn-price-gold" onclick="window.open('https://www.ytacademy.fr/6350270f','_blank')">Rejoindre maintenant</button>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Sur Mesure</div>
+      <div class="plan-price" style="font-size:1.6rem;margin-top:.5rem">Accompagnement<br>A à Z</div>
+      <div class="plan-period">offre personnalisée</div>
+      <div class="plan-desc">Un coaching individuel complet pour aller le plus vite possible</div>
+      <ul class="plan-features">
+        <li>Tout l'offre Academy</li>
+        <li>Séances 1-to-1 chaque semaine</li>
+        <li>Stratégie personnalisée</li>
+        <li>Accès WhatsApp direct</li>
+        <li>Audit de ta chaîne</li>
+        <li>Suivi jusqu'au résultat</li>
+      </ul>
+      <button class="btn-price btn-price-outline" onclick="window.open('https://www.ytacademy.fr/6350270f','_blank')">Nous contacter</button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+  <div class="sec-tag">Questions fréquentes</div>
+  <div class="sec-title">Tu as des <em>questions ?</em></div>
+  <div class="faq-list">
+    <div class="faq-item"><div class="faq-q">Faut-il montrer son visage pour réussir sur YouTube ?<span class="faq-icon">+</span></div><div class="faq-a">Non, absolument pas. La formation est entièrement basée sur le modèle "faceless YouTube". Tu apprends à créer avec de la voix off, des visuels et des outils d'IA sans jamais apparaître à l'écran.</div></div>
+    <div class="faq-item"><div class="faq-q">Est-ce que je peux commencer sans aucune expérience ?<span class="faq-icon">+</span></div><div class="faq-a">Oui ! La formation est conçue pour les débutants complets. Chaque module part de zéro et te guide pas à pas, des bases du montage jusqu'à la monétisation avancée.</div></div>
+    <div class="faq-item"><div class="faq-q">En combien de temps puis-je voir des résultats ?<span class="faq-icon">+</span></div><div class="faq-a">La majorité de nos élèves voient leurs premières vues significatives dans les 30 à 60 jours. Les premiers revenus arrivent généralement entre 2 et 4 mois selon l'investissement personnel.</div></div>
+    <div class="faq-item"><div class="faq-q">Puis-je annuler mon abonnement à tout moment ?<span class="faq-icon">+</span></div><div class="faq-a">Oui, tu peux annuler à tout moment depuis ton dashboard. Aucun engagement, aucune question posée. Tu gardes l'accès jusqu'à la fin de ta période en cours.</div></div>
+    <div class="faq-item"><div class="faq-q">Qu'est-ce que la garantie résultat 30 jours ?<span class="faq-icon">+</span></div><div class="faq-a">Si tu suis le programme à 100% pendant 30 jours et que tu ne constates aucun progrès, on te rembourse intégralement. Aucune question posée.</div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="sec sec-dark" id="contact">
+  <div class="sec-tag">Une question ?</div>
+  <div class="sec-title">Contacte <em>l'équipe</em></div>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>Tu hésites encore ? Envoie-nous un message, on répond sous 24h. Notre équipe est là pour t'aider à choisir la formule qui correspond à tes objectifs.</p>
+      <a href="mailto:contact@ytacademy.fr" class="c-link"><span>✉️</span><span>contact@ytacademy.fr</span></a>
+      <a href="#" class="c-link"><span>💬</span><span>Discord communautaire</span></a>
+      <a href="#" class="c-link"><span>📸</span><span>Instagram @ytacademy</span></a>
+    </div>
+    <div class="contact-form">
+      <input class="form-input" type="text" placeholder="Ton prénom">
+      <input class="form-input" type="email" placeholder="Ton email">
+      <textarea class="form-input" placeholder="Ton message..."></textarea>
+      <button class="btn-gold" style="width:100%;justify-content:center" onclick="showToast('✅ Message envoyé ! On te répond sous 24h.')">Envoyer le message 🚀</button>
+    </div>
+  </div>
+</section>
+
+<footer><p>© 2025 <span class="gold">YTAcademy</span> — Tous droits réservés · <a href="#" style="color:#555;text-decoration:none">Mentions légales</a> · <a href="#" style="color:#555;text-decoration:none">CGV</a></p></footer>
+</div>
+
+<!-- ===================== PAGE DASHBOARD ÉLÈVE ===================== -->
+<div id="page-dashboard" class="page hidden">
+  <div class="dash-header">
+    <div class="dash-welcome">
+      <h2>Bonjour, <span class="gold" id="dashUserName">Prénom</span> 👋</h2>
+      <p id="dashUserEmail">email@gmail.com</p>
+    </div>
+    <div style="display:flex;gap:.8rem;align-items:center;flex-wrap:wrap">
+      <span class="dash-plan-badge" id="dashPlanBadge">Plan Academy</span>
+      <button class="btn-ghost" style="padding:.4rem 1rem;font-size:.82rem" onclick="logout()">Déconnexion</button>
+    </div>
+  </div>
+  <div class="dash-body">
+    <div class="dash-stats">
+      <div class="ds"><div class="ds-num" id="dsMods">0</div><div class="ds-label">Modules débloqués</div></div>
+      <div class="ds"><div class="ds-num" id="dsProgress">0%</div><div class="ds-label">Progression</div></div>
+      <div class="ds"><div class="ds-num" id="dsDays">0j</div><div class="ds-label">Jours d'accès</div></div>
+    </div>
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:.5rem">Ta progression</h3>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+    <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">Tes modules</h3>
+    <div class="modules-list" id="dashModulesList"></div>
+    <div class="video-player-wrap hidden" id="videoPlayerWrap">
+      <h3 id="videoTitle">Titre du module</h3>
+      <div class="video-embed" id="videoEmbed"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PAGE ADMIN ===================== -->
+<div id="page-admin" class="page hidden">
+  <div class="admin-layout">
+    <div class="admin-sidebar">
+      <h3>Principal</h3>
+      <div class="admin-nav-item active" onclick="adminTab('overview')"><span>📊</span><span>Vue d'ensemble</span></div>
+      <div class="admin-nav-item" onclick="adminTab('users')"><span>👥</span><span>Utilisateurs</span></div>
+      <div class="admin-nav-item" onclick="adminTab('visits')"><span>👁️</span><span>Visites & Tracking</span></div>
+      <h3>Formation</h3>
+      <div class="admin-nav-item" onclick="adminTab('modules')"><span>🎬</span><span>Modules</span></div>
+      <h3>Compte</h3>
+      <div class="admin-nav-item" onclick="logout()"><span>🚪</span><span>Déconnexion</span></div>
+    </div>
+    <div class="admin-content">
+      <!-- OVERVIEW -->
+      <div id="adminTabOverview">
+        <div class="admin-topbar"><h2>Dashboard Admin</h2><span class="dash-plan-badge">Admin</span></div>
+        <div class="admin-cards">
+          <div class="ac"><div class="ac-num" id="acUsers">0</div><div class="ac-label">Utilisateurs inscrits</div><div class="ac-trend">↑ actif</div></div>
+          <div class="ac"><div class="ac-num" id="acRevenue">0€</div><div class="ac-label">Revenus simulés / mois</div><div class="ac-trend">↑ en croissance</div></div>
+          <div class="ac"><div class="ac-num" id="acVisits">0</div><div class="ac-label">Visites totales</div><div class="ac-trend">↑ aujourd'hui</div></div>
+          <div class="ac"><div class="ac-num" id="acModules">0</div><div class="ac-label">Modules publiés</div></div>
+        </div>
+        <div class="admin-table-wrap">
+          <div class="admin-table-head"><h3>Derniers inscrits</h3></div>
+          <table><thead><tr><th>Nom</th><th>Email</th><th>Plan</th><th>Inscrit le</th><th>Statut</th></tr></thead>
+          <tbody id="adminUsersPreview"></tbody></table>
+        </div>
+      </div>
+      <!-- USERS -->
+      <div id="adminTabUsers" class="hidden">
+        <div class="admin-topbar"><h2>Utilisateurs</h2></div>
+        <div class="admin-table-wrap">
+          <div class="admin-table-head"><h3>Tous les membres</h3></div>
+          <table><thead><tr><th>Nom</th><th>Email</th><th>Plan</th><th>IP</th><th>Inscrit le</th><th>Statut</th></tr></thead>
+          <tbody id="adminUsersTable"></tbody></table>
+        </div>
+      </div>
+      <!-- VISITS -->
+      <div id="adminTabVisits" class="hidden">
+        <div class="admin-topbar"><h2>Visites & Tracking</h2></div>
+        <div class="admin-cards">
+          <div class="ac"><div class="ac-num" id="acV1">0</div><div class="ac-label">Visites aujourd'hui</div></div>
+          <div class="ac"><div class="ac-num" id="acV2">0</div><div class="ac-label">Pages vues</div></div>
+          <div class="ac"><div class="ac-num" id="acV3">0</div><div class="ac-label">Visiteurs uniques</div></div>
+        </div>
+        <div class="admin-table-wrap">
+          <div class="admin-table-head"><h3>Journal des visites</h3></div>
+          <table><thead><tr><th>Heure</th><th>IP</th><th>Page</th><th>Navigateur</th><th>Pays</th></tr></thead>
+          <tbody id="visitsTable"></tbody></table>
+        </div>
+      </div>
+      <!-- MODULES -->
+      <div id="adminTabModules" class="hidden">
+        <div class="admin-topbar"><h2>Gérer les modules</h2><button class="btn-sm btn-sm-gold" onclick="showAddModule()">+ Ajouter un module</button></div>
+        <div class="module-editor hidden" id="moduleEditor">
+          <h3 id="editorTitle">Nouveau module</h3>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Titre du module</label><input class="form-control" id="modTitle" placeholder="ex: Choisir sa Niche"></div>
+            <div class="form-group"><label class="form-label">Numéro</label><input class="form-control" id="modNum" placeholder="ex: 01" type="number"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Plan minimum requis</label>
+              <select class="form-control" id="modPlan">
+                <option value="starter">Starter (49€)</option>
+                <option value="academy">Academy (79€)</option>
+                <option value="custom">Sur Mesure</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Icône (emoji)</label><input class="form-control" id="modIcon" placeholder="🎯" maxlength="2"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Description courte</label><textarea class="form-control" id="modDesc" placeholder="Description visible sur le dashboard élève..."></textarea></div>
+          <div class="form-group"><label class="form-label">URL de la vidéo (YouTube embed ou autre)</label><input class="form-control" id="modVideo" placeholder="https://www.youtube.com/embed/xxxxx"></div>
+          <div style="display:flex;gap:.8rem;margin-top:.5rem">
+            <button class="btn-sm btn-sm-gold" onclick="saveModule()">💾 Enregistrer</button>
+            <button class="btn-sm" style="background:#222;color:#aaa" onclick="cancelModule()">Annuler</button>
+          </div>
+        </div>
+        <div class="module-list-admin" id="adminModuleList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay hidden" id="modalAuth">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('auth')">✕</button>
+    <div class="modal-logo"><span>YTAcademy</span></div>
+    <div class="modal-title">Connexion & Inscription</div>
+    <div class="modal-sub">Rejoins des centaines d'élèves qui construisent leur business YouTube</div>
+    <button class="btn-google" onclick="loginWithGoogle()">
+      <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.8 2.5 30.3 0 24 0 14.7 0 6.7 5.4 2.7 13.3l7.8 6c1.8-5.4 6.8-9.8 13.5-9.8z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.3 5.5-4.8 7.2l7.5 5.8c4.4-4.1 7.1-10.1 7.1-17z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.7-4.7l-7.8-6A23.9 23.9 0 0 0 0 24c0 3.9.9 7.5 2.7 10.7l7.8-6z"/><path fill="#34A853" d="M24 48c6.3 0 11.6-2.1 15.5-5.7l-7.5-5.8c-2.1 1.4-4.8 2.3-8 2.3-6.7 0-12.3-4.5-14.3-10.6l-7.8 6C6.7 42.6 14.7 48 24 48z"/></svg>
+      Continuer avec Google
+    </button>
+    <div style="margin-top:1rem;text-align:center;font-size:.78rem;color:#555">En continuant, tu acceptes nos CGV et politique de confidentialité</div>
+  </div>
+</div>
+
+<!-- PLAN MODAL -->
+<div class="modal-overlay hidden" id="modalPlan">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('plan')">✕</button>
+    <div class="modal-logo"><span>YTAcademy</span></div>
+    <div class="modal-title">Choisis ton abonnement</div>
+    <div class="modal-sub">Sans engagement • Annule à tout moment</div>
+    <div class="plan-select-grid">
+      <div class="plan-select-item" id="ps-starter" onclick="selectPlan('starter')">
+        <div class="plan-info"><strong>Starter</strong><span>3 modules · Discord</span></div>
+        <div class="plan-price-tag">49€<small>/mois</small></div>
+      </div>
+      <div class="plan-select-item pop-plan" id="ps-academy" onclick="selectPlan('academy')">
+        <div class="plan-info"><strong>Academy <span class="badge-pop">POPULAIRE</span></strong><span>6 modules · Appels · Templates</span></div>
+        <div class="plan-price-tag">79€<small>/mois</small></div>
+      </div>
+      <div class="plan-select-item" id="ps-custom" onclick="selectPlan('custom')">
+        <div class="plan-info"><strong>Sur Mesure</strong><span>Accompagnement A à Z · 1-to-1</span></div>
+        <div class="plan-price-tag" style="font-size:.85rem;text-align:right">Sur<br>devis</div>
+      </div>
+    </div>
+    <button class="btn-gold" style="width:100%;justify-content:center;margin-top:1.5rem" onclick="confirmPayment()">💳 Procéder au paiement (Stripe)</button>
+    <div style="margin-top:.8rem;text-align:center;font-size:.75rem;color:#555">🔒 Paiement sécurisé via Stripe · SSL</div>
+  </div>
+</div>
+
+<script>
+// ========= STATE =========
+const ADMIN_EMAIL = "admin@ytacademy.fr"; // ← Change par TON email Google
+
+let state = {
+  currentPage: 'home',
+  user: null,
+  plan: null,
+  modules: [
+    {id:1,num:'01',title:'Choisir sa Niche',icon:'🎯',desc:'Identifie les niches les plus rentables.',video:'https://www.youtube.com/embed/dQw4w9WgXcQ',plan:'starter',done:false},
+    {id:2,num:'02',title:'Créer sans apparaître',icon:'🎬',desc:'Scripts, voix off, montage sans visage.',video:'https://www.youtube.com/embed/dQw4w9WgXcQ',plan:'starter',done:false},
+    {id:3,num:'03',title:'Croissance Organique',icon:'📈',desc:'Comprends l\'algorithme YouTube.',video:'https://www.youtube.com/embed/dQw4w9WgXcQ',plan:'starter',done:false},
+    {id:4,num:'04',title:'Monétisation Avancée',icon:'💰',desc:'AdSense, sponsoring, affiliation.',video:'https://www.youtube.com/embed/dQw4w9WgXcQ',plan:'academy',done:false},
+    {id:5,num:'05',title:'Automatiser & Déléguer',icon:'⚙️',desc:'Construis ton équipe.',video:'https://www.youtube.com/embed/dQw4w9WgXcQ',plan:'academy',done:false},
+    {id:6,num:'06',title:'Scaler ton Business',icon:'🏆',desc:'Lance plusieurs chaînes.',video:'https://www.youtube.com/embed/dQw4w9WgXcQ',plan:'academy',done:false},
+  ],
+  users: [
+    {name:'Thomas R.',email:'thomas@gmail.com',plan:'academy',ip:'91.234.12.45',date:'2025-01-15',status:'active'},
+    {name:'Sarah M.',email:'sarah@gmail.com',plan:'starter',ip:'78.124.55.12',date:'2025-01-20',status:'active'},
+    {name:'Karim B.',email:'karim@gmail.com',plan:'custom',ip:'212.44.78.90',date:'2025-02-01',status:'active'},
+    {name:'Julie T.',email:'julie@gmail.com',plan:'academy',ip:'176.31.12.88',date:'2025-02-10',status:'active'},
+  ],
+  visits: [
+    {time:'14:32',ip:'91.234.12.45',page:'Accueil',browser:'Chrome 120',country:'🇫🇷 France'},
+    {time:'14:28',ip:'78.124.55.12',page:'Tarifs',browser:'Safari 17',country:'🇧🇪 Belgique'},
+    {time:'14:15',ip:'212.44.78.90',page:'Programme',browser:'Firefox 121',country:'🇫🇷 France'},
+    {time:'13:55',ip:'176.31.12.88',page:'Accueil',browser:'Chrome 120',country:'🇨🇭 Suisse'},
+    {time:'13:40',ip:'99.12.44.200',page:'FAQ',browser:'Edge 120',country:'🇫🇷 France'},
+  ],
+  selectedPlan: 'academy',
+  editingModule: null
+};
+
+// ========= PAGES =========
+function showPage(p){
+  ['home','dashboard','admin'].forEach(pg=>
+    document.getElementById('page-'+pg).classList.add('hidden')
+  );
+  document.getElementById('page-'+p).classList.remove('hidden');
+  state.currentPage = p;
+  window.scrollTo(0,0);
+  updateNav();
+}
+
+function updateNav(){
+  const nr = document.getElementById('navRight');
+  if(state.user){
+    const isAdmin = state.user.email === ADMIN_EMAIL;
+    nr.innerHTML = `
+      <span style="font-size:.82rem;color:#888">${state.user.name}</span>
+      ${isAdmin?`<button class="btn-nav-outline" onclick="showPage('admin')">Admin</button>`:''}
+      <button class="btn-nav-outline" onclick="showPage('dashboard')">Mon espace</button>
+      <button class="btn-nav" onclick="logout()">Déconnexion</button>
+    `;
+  } else {
+    nr.innerHTML = `
+      <button class="btn-nav-outline" onclick="openModal('auth')">Connexion</button>
+      <button class="btn-nav" onclick="openModal('auth')">Rejoindre</button>
+    `;
+  }
+}
+
+// ========= AUTH =========
+function loginWithGoogle(){
+  // Simulation Google OAuth
+  const mockUsers = [
+    {name:'Admin YTA', email:ADMIN_EMAIL},
+    {name:'Thomas R.', email:'thomas@gmail.com'},
+  ];
+  const u = mockUsers[1]; // Élève normal par défaut
+  state.user = u;
+  closeModal('auth');
+  
+  const existingUser = state.users.find(x=>x.email===u.email);
+  if(!existingUser){
+    openModal('plan');
+  } else {
+    state.plan = existingUser.plan;
+    afterLogin();
+  }
+}
+
+function afterLogin(){
+  closeModal('plan');
+  const isAdmin = state.user.email === ADMIN_EMAIL;
+  if(isAdmin){
+    showPage('admin');
+    loadAdminData();
+  } else {
+    showPage('dashboard');
+    loadDashboard();
+  }
+  showToast('✅ Connexion réussie ! Bienvenue '+state.user.name);
+}
+
+function logout(){
+  state.user = null;
+  state.plan = null;
+  showPage('home');
+  showToast('👋 À bientôt !');
+}
+
+// ========= MODALS =========
+function openModal(type, plan){
+  if(type==='plan' && plan) selectPlan(plan);
+  document.getElementById('modal'+cap(type)).classList.remove('hidden');
+}
+function closeModal(type){
+  document.getElementById('modal'+cap(type)).classList.add('hidden');
+}
+function cap(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+
+// ========= PLAN SELECT =========
+function selectPlan(p){
+  state.selectedPlan = p;
+  ['starter','academy','custom'].forEach(x=>{
+    document.getElementById('ps-'+x)?.classList.remove('selected');
+  });
+  document.getElementById('ps-'+p)?.classList.add('selected');
+}
+
+const SYSTEME_LINK = "https://www.ytacademy.fr/6350270f";
+
+function confirmPayment(){
+  if(state.selectedPlan === 'custom'){
+    showToast('📩 Redirection vers l\'offre sur mesure...');
+    setTimeout(()=>window.open(SYSTEME_LINK,'_blank'), 800);
+    closeModal('plan');
+    return;
+  }
+  showToast('💳 Redirection vers le paiement sécurisé...');
+  setTimeout(()=>window.open(SYSTEME_LINK,'_blank'), 800);
+  closeModal('plan');
+}
+
+// ========= DASHBOARD =========
+function loadDashboard(){
+  if(!state.user) return;
+  const user = state.users.find(x=>x.email===state.user.email);
+  const plan = user ? user.plan : 'starter';
+  const planNames = {starter:'Starter 49€/mois', academy:'Academy 79€/mois', custom:'Sur Mesure'};
+  
+  document.getElementById('dashUserName').textContent = state.user.name.split(' ')[0];
+  document.getElementById('dashUserEmail').textContent = state.user.email;
+  document.getElementById('dashPlanBadge').textContent = planNames[plan]||plan;
+  
+  const accessible = state.modules.filter(m=>canAccess(m.plan, plan));
+  document.getElementById('dsMods').textContent = accessible.length;
+  document.getElementById('dsDays').textContent = '32j';
+  
+  renderDashModules(plan);
+}
+
+function canAccess(required, userPlan){
+  const order = ['starter','academy','custom'];
+  return order.indexOf(userPlan) >= order.indexOf(required);
+}
+
+function renderDashModules(plan){
+  const list = document.getElementById('dashModulesList');
+  const done = state.modules.filter(m=>m.done && canAccess(m.plan,plan)).length;
+  const total = state.modules.filter(m=>canAccess(m.plan,plan)).length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('dsProgress').textContent = pct+'%';
+  document.getElementById('progressBar').style.width = pct+'%';
+
+  list.innerHTML = state.modules.map(m=>{
+    const access = canAccess(m.plan, plan);
+    const statusClass = !access ? 'mod-locked' : m.done ? 'mod-done' : 'mod-open';
+    const statusText = !access ? '🔒 Bloqué' : m.done ? '✅ Terminé' : '▶ Regarder';
+    return `<div class="mod-item">
+      <div class="mod-item-left">
+        <span class="mod-num-badge">MODULE ${m.num}</span>
+        <div class="mod-item-info"><strong>${m.icon} ${m.title}</strong><span>${m.desc}</span></div>
+      </div>
+      <span class="mod-status ${statusClass}" onclick="${access?`watchModule(${m.id})`:''}"> ${statusText}</span>
+    </div>`;
+  }).join('');
+}
+
+function watchModule(id){
+  const m = state.modules.find(x=>x.id===id);
+  if(!m) return;
+  m.done = true;
+  const user = state.users.find(x=>x.email===state.user?.email);
+  renderDashModules(user?.plan||'starter');
+  document.getElementById('videoPlayerWrap').classList.remove('hidden');
+  document.getElementById('videoTitle').textContent = m.icon+' '+m.title;
+  document.getElementById('videoEmbed').innerHTML = `<iframe src="${m.video}" allowfullscreen></iframe>`;
+  document.getElementById('videoPlayerWrap').scrollIntoView({behavior:'smooth'});
+}
+
+// ========= ADMIN =========
+function loadAdminData(){
+  adminTab('overview');
+}
+
+function adminTab(tab){
+  ['overview','users','visits','modules'].forEach(t=>{
+    const el = document.getElementById('adminTab'+cap(t));
+    if(el) el.classList.add('hidden');
+    document.querySelectorAll('.admin-nav-item').forEach(n=>{
+      if(n.getAttribute('onclick')===`adminTab('${t}')`) n.classList.remove('active');
+    });
+  });
+  document.getElementById('adminTab'+cap(tab))?.classList.remove('hidden');
+  document.querySelectorAll('.admin-nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')===`adminTab('${tab}')`) n.classList.add('active');
+  });
+  
+  if(tab==='overview') renderOverview();
+  if(tab==='users') renderUsersTable();
+  if(tab==='visits') renderVisits();
+  if(tab==='modules') renderAdminModules();
+}
+
+function renderOverview(){
+  document.getElementById('acUsers').textContent = state.users.length;
+  const rev = state.users.reduce((a,u)=>a+(u.plan==='academy'?79:u.plan==='starter'?49:299),0);
+  document.getElementById('acRevenue').textContent = rev+'€';
+  document.getElementById('acVisits').textContent = state.visits.length;
+  document.getElementById('acModules').textContent = state.modules.length;
+  
+  const tbody = document.getElementById('adminUsersPreview');
+  tbody.innerHTML = state.users.slice(0,4).map(u=>userRow(u)).join('');
+}
+
+function renderUsersTable(){
+  const tbody = document.getElementById('adminUsersTable');
+  tbody.innerHTML = state.users.map(u=>`
+    <tr><td>${u.name}</td><td>${u.email}</td><td><span class="badge badge-gold">${u.plan}</span></td>
+    <td style="font-family:monospace;font-size:.78rem;color:#888">${u.ip}</td><td>${u.date}</td>
+    <td><span class="badge badge-green">${u.status}</span></td></tr>
+  `).join('');
+}
+
+function userRow(u){
+  return `<tr><td>${u.name}</td><td>${u.email}</td><td><span class="badge badge-gold">${u.plan}</span></td><td>${u.date}</td><td><span class="badge badge-green">${u.status}</span></td></tr>`;
+}
+
+function renderVisits(){
+  const v1=state.visits.length, v2=v1*3, v3=Math.floor(v1*.7);
+  document.getElementById('acV1').textContent=v1;
+  document.getElementById('acV2').textContent=v2;
+  document.getElementById('acV3').textContent=v3;
+  const tbody = document.getElementById('visitsTable');
+  tbody.innerHTML = state.visits.map(v=>`
+    <tr><td>${v.time}</td><td style="font-family:monospace;font-size:.78rem;color:#888">${v.ip}</td>
+    <td style="color:var(--gold)">${v.page}</td><td style="color:#888">${v.browser}</td><td>${v.country}</td></tr>
+  `).join('');
+}
+
+function renderAdminModules(){
+  const list = document.getElementById('adminModuleList');
+  list.innerHTML = state.modules.map(m=>`
+    <div class="mod-admin-item">
+      <div class="mod-admin-info">
+        <strong>${m.icon} MODULE ${m.num} — ${m.title}</strong>
+        <span>Plan: ${m.plan} · ${m.desc.substring(0,50)}...</span>
+      </div>
+      <div class="mod-admin-actions">
+        <button class="btn-sm btn-sm-gold" onclick="editModule(${m.id})">✏️ Éditer</button>
+        <button class="btn-sm btn-sm-red" onclick="deleteModule(${m.id})">🗑️</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function showAddModule(){
+  state.editingModule = null;
+  document.getElementById('editorTitle').textContent = 'Nouveau module';
+  ['modTitle','modNum','modIcon','modDesc','modVideo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('modPlan').value = 'starter';
+  document.getElementById('moduleEditor').classList.remove('hidden');
+}
+
+function editModule(id){
+  const m = state.modules.find(x=>x.id===id);
+  state.editingModule = id;
+  document.getElementById('editorTitle').textContent = 'Modifier module';
+  document.getElementById('modTitle').value = m.title;
+  document.getElementById('modNum').value = m.num;
+  document.getElementById('modIcon').value = m.icon;
+  document.getElementById('modDesc').value = m.desc;
+  document.getElementById('modVideo').value = m.video;
+  document.getElementById('modPlan').value = m.plan;
+  document.getElementById('moduleEditor').classList.remove('hidden');
+}
+
+function saveModule(){
+  const m = {
+    title: document.getElementById('modTitle').value||'Nouveau module',
+    num: String(document.getElementById('modNum').value||state.modules.length+1).padStart(2,'0'),
+    icon: document.getElementById('modIcon').value||'📹',
+    desc: document.getElementById('modDesc').value||'',
+    video: document.getElementById('modVideo').value||'',
+    plan: document.getElementById('modPlan').value,
+    done: false
+  };
+  if(state.editingModule){
+    const idx = state.modules.findIndex(x=>x.id===state.editingModule);
+    state.modules[idx] = {...state.modules[idx],...m};
+  } else {
+    m.id = Date.now();
+    state.modules.push(m);
+  }
+  cancelModule();
+  renderAdminModules();
+  showToast('✅ Module enregistré !');
+}
+
+function deleteModule(id){
+  state.modules = state.modules.filter(x=>x.id!==id);
+  renderAdminModules();
+  showToast('🗑️ Module supprimé');
+}
+
+function cancelModule(){
+  document.getElementById('moduleEditor').classList.add('hidden');
+  state.editingModule = null;
+}
+
+// ========= FAQ =========
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement;
+    document.querySelectorAll('.faq-item').forEach(i=>{if(i!==item)i.classList.remove('open')});
+    item.classList.toggle('open');
+  });
+});
+
+// ========= TOAST =========
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// ========= SCROLL NAV HIGHLIGHT =========
+const sections=document.querySelectorAll('section[id]');
+const links=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  sections.forEach(s=>{if(window.scrollY>=s.offsetTop-80)cur=s.id});
+  links.forEach(l=>{l.style.color=l.getAttribute('href')==='#'+cur?'var(--gold)':'#aaa'});
+});
+
+// Track visit simulation
+state.visits.unshift({time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}),ip:'Votre IP',page:'Accueil',browser:navigator.userAgent.split(' ').pop(),country:'🌍 Détecté'});
+</script>
+</body>
+</html>
